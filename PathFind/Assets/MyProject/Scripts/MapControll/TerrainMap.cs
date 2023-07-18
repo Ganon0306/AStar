@@ -72,6 +72,34 @@ public class TerrainMap : TileMapController
             tempChangeTile.SetLocalPos(allTileObjs[i].transform.localPosition);
         }
         // } 타일맵의 일부를 일정 확률로 타른 타일로 교체하는 로직
+
+        // { 기존에 존재하는 타일의 순서를 조정하고, 컨트롤러를 캐싱하는 로직
+        TerrainControler tempTerrain = default;
+        TerrainType terrainType = TerrainType.NONE;
+
+        int loopCnt = 0;
+        foreach (GameObject tile_ in allTileObjs)
+        {
+            tempTerrain = tile_.GetComponentMust<TerrainControler>();
+            switch(tempTerrain.name)
+            {
+                case RDefine.TERRAIN_PREF_PLAIN:
+                    terrainType = TerrainType.PLAIN_PASS; 
+                    break;
+                case RDefine.TERRAIN_PREF_OCEAN:
+                    terrainType = TerrainType.OCEAN_N_PASS; 
+                    break;
+                default:
+                    terrainType = TerrainType.NONE;
+                    break;
+            }       // switch : 지형별로 다른 설정을 한다.
+
+            // TODO : tempTerrain Setup 함수 필요함.
+            tempTerrain.transform.SetAsFirstSibling();
+            allTerrains.Add(tempTerrain);
+            loopCnt += 1;
+        }   // loop : 타일의 이름과 랜더링 순서대로 정렬하는 루프
+        // } 기존에 존재하는 타일의 순서를 조정하고, 컨트롤러를 캐싱하는 로직
     }
 
 
